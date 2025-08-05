@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Transparencia</title>
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Material Design Lite CSS -->
+    <link
+      rel="stylesheet"
+      href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+    />
+    <!-- Material Design Lite JavaScript -->
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+      :root {
+        --primary: #b25fac;
+        --primary-dark: #7a3e7a;
+        --primary-light: #e1bee7;
+        --background: #f5f5f5;
+        --surface: #ffffff;
+        --text-primary: #212121;
+        --text-secondary: #757575;
+        --border: #e0e0e0;
+        --success: #4caf50;
+        --warning: #ff9800;
+        --error: #f44336;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text-primary);
+        font-family: "Roboto", "Helvetica", sans-serif;
+      }
+
+      .mdl-layout__header {
+        background-color: var(--primary);
+      }
+
+      .mdl-layout__drawer .mdl-navigation__link {
+        color: var(--text-primary);
+      }
+
+      .mdl-card {
+        width: 100%;
+        min-height: auto;
+        margin-bottom: 24px;
+      }
+
+      .mdl-card__title {
+        color: var(--primary-dark);
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--primary-light);
+      }
+
+      .mdl-textfield {
+        width: 100%;
+      }
+
+      .mdl-selectfield {
+        width: 100%;
+        position: relative;
+        margin-bottom: 20px;
+      }
+
+      .mdl-selectfield select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 100%;
+        padding: 4px 0;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: transparent;
+        font-size: 16px;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      .mdl-selectfield select:focus {
+        outline: none;
+        border-bottom: 2px solid var(--primary);
+      }
+
+      .mdl-selectfield label {
+        color: rgba(0, 0, 0, 0.26);
+        font-size: 12px;
+        position: absolute;
+        top: -20px;
+        left: 0;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin: 16px 0;
+      }
+
+      .form-section {
+        margin-bottom: 32px;
+      }
+
+      .form-section h3 {
+        color: var(--primary-dark);
+        margin: 24px 0 16px 0;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mdl-data-table {
+        width: 100%;
+        border: none;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      }
+
+      .mdl-data-table thead {
+        background-color: var(--primary-light);
+      }
+
+      .mdl-data-table td,
+      .mdl-data-table th {
+        text-align: left;
+        padding: 12px 16px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .badge-success {
+        background-color: rgba(76, 175, 80, 0.2);
+        color: var(--success);
+      }
+
+      .badge-warning {
+        background-color: rgba(255, 152, 0, 0.2);
+        color: var(--warning);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+
+      .mdl-layout__content {
+        padding: 24px 0;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 8px 0;
+      }
+
+      .checkbox-item {
+        flex: 1;
+        min-width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title"
+            >Sistema de Transparencia - Registro de Procedimientos</span
+          >
+          <div class="mdl-layout-spacer"></div>
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <a class="mdl-navigation__link" href="#"
+              ><i class="material-icons">home</i> Inicio</a
+            >
+            <a class="mdl-navigation__link" href="#"
+              ><i class="material-icons">person</i> Perfil</a
+            >
+            <a class="mdl-navigation__link" href="#"
+              ><i class="material-icons">exit_to_app</i> Salir</a
+            >
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Menú</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="#"
+            ><i class="material-icons">dashboard</i> Dashboard</a
+          >
+          <a class="mdl-navigation__link" href="#"
+            ><i class="material-icons">assignment</i> Registros</a
+          >
+          <a class="mdl-navigation__link" href="#"
+            ><i class="material-icons">people</i> Servidores Públicos</a
+          >
+          <a class="mdl-navigation__link" href="#"
+            ><i class="material-icons">description</i> Reportes</a
+          >
+          <a class="mdl-navigation__link" href="#"
+            ><i class="material-icons">settings</i> Configuración</a
+          >
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+        <div class="container">
+          <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">
+                Datos del Procedimiento de Contratación
+              </h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div class="form-grid">
+                <div
+                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                >
+                  <input
+                    class="mdl-textfield__input"
+                    type="number"
+                    id="ejercicio"
+                  />
+                  <label class="mdl-textfield__label" for="ejercicio"
+                    >2. Ejercicio</label
+                  >
+                </div>
+
+                <div
+                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                >
+                  <input
+                    class="mdl-textfield__input"
+                    type="text"
+                    id="numeroExpediente"
+                  />
+                  <label class="mdl-textfield__label" for="numeroExpediente"
+                    >3. Número de expediente, folio o nomenclatura</label
+                  >
+                </div>
+
+                <div class="mdl-selectfield">
+                  <label for="datosGenerales"
+                    >3. Datos generales de la persona servidora pública</label
+                  >
+                  <select id="datosGenerales">
+                    <option value=""></option>
+                    <option value="1">
+                      Juan Pérez López - Director de Finanzas
+                    </option>
+                    <option value="2">
+                      María González Ruiz - Jefa de Compras
+                    </option>
+                  </select>
+                </div>
+
+                <div
+                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                >
+                  <input
+                    class="mdl-textfield__input"
+                    type="date"
+                    id="fechaParticipacion"
+                  />
+                  <label class="mdl-textfield__label" for="fechaParticipacion"
+                    >4. Fecha en que se realizó la participación</label
+                  >
+                </div>
+
+                <div class="mdl-selectfield">
+                  <label for="tipoProcedimiento"
+                    >5. Tipo de procedimiento</label
+                  >
+                  <select id="tipoProcedimiento">
+                    <option value=""></option>
+                    <option value="DICTAMEN_VALUATORIO">
+                      Dictamen valuatorio
+                    </option>
+                    <option value="OTORGAMIENTO_CONCECIONES">
+                      Otorgamiento de concesiones
+                    </option>
+                    <option value="ENAJENACION_BIENES">
+                      Enajenación de bienes
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mdl-selectfield">
+                  <label for="areaParticipacion"
+                    >6. Área(s) en la(s) que participó</label
+                  >
+                  <select id="areaParticipacion">
+                    <option value=""></option>
+                    <option value="AREA_EJECUCION">Área de ejecución</option>
+                    <option value="AREA_RESPONSABLE">Área responsable</option>
+                    <option value="AREA_SUPERVISION">
+                      Área de supervisión
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Datos Generales del Procedimiento</h3>
+                <div class="form-grid">
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="text"
+                      id="objetoContrato"
+                    />
+                    <label class="mdl-textfield__label" for="objetoContrato"
+                      >Objeto del contrato</label
+                    >
+                  </div>
+
+                  <div class="mdl-selectfield">
+                    <label for="procedimientoContratacion"
+                      >Procedimiento de contratación</label
+                    >
+                    <select id="procedimientoContratacion">
+                      <option value=""></option>
+                      <option value="LICITACION_PUBLICA">
+                        Licitación Pública
+                      </option>
+                      <option value="INVITACION_RESTRINGIDA">
+                        Invitación Restringida
+                      </option>
+                      <option value="ADJUDICACION_DIRECTA">
+                        Adjudicación Directa
+                      </option>
+                    </select>
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="date"
+                      id="fechaInicio"
+                    />
+                    <label class="mdl-textfield__label" for="fechaInicio"
+                      >Fecha de inicio del procedimiento</label
+                    >
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="date"
+                      id="fechaConclusion"
+                    />
+                    <label class="mdl-textfield__label" for="fechaConclusion"
+                      >Fecha de conclusión del procedimiento</label
+                    >
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="number"
+                      id="monto"
+                      step="0.01"
+                    />
+                    <label class="mdl-textfield__label" for="monto"
+                      >Monto del contrato</label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>
+                  5.1 Participación en Procedimientos de Contratación Pública
+                </h3>
+                <div class="checkbox-group">
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="contratacionAdquisiciones"
+                    >
+                      <input
+                        type="checkbox"
+                        id="contratacionAdquisiciones"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Contratación de adquisiciones y arrendamientos de
+                        bienes muebles y servicios</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="contratacionObras"
+                    >
+                      <input
+                        type="checkbox"
+                        id="contratacionObras"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Contratación de obra pública y servicios
+                        relacionados</span
+                      >
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="mdl-selectfield">
+                    <label for="materia">Materia</label>
+                    <select id="materia">
+                      <option value=""></option>
+                      <option value="ARRENDAMIENTO">Arrendamiento</option>
+                      <option value="ADQUISICION">Adquisición</option>
+                      <option value="SERVICIOS">Servicios</option>
+                      <option value="OTRO">Otro (Especifique)</option>
+                    </select>
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="text"
+                      id="otroMateria"
+                    />
+                    <label class="mdl-textfield__label" for="otroMateria"
+                      >Otro (Especifique)</label
+                    >
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="date"
+                      id="fechaInicioProcedimiento"
+                    />
+                    <label
+                      class="mdl-textfield__label"
+                      for="fechaInicioProcedimiento"
+                      >Fecha de inicio del procedimiento</label
+                    >
+                  </div>
+
+                  <div class="mdl-selectfield">
+                    <label for="continuaParticipando"
+                      >¿Continúa participando?</label
+                    >
+                    <select id="continuaParticipando">
+                      <option value=""></option>
+                      <option value="SI">Sí</option>
+                      <option value="NO">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>5.2 Participación en el Otorgamiento de Concesiones</h3>
+                <div class="form-grid">
+                  <div class="mdl-selectfield">
+                    <label for="tipoActo">Tipo de acto</label>
+                    <select id="tipoActo">
+                      <option value=""></option>
+                      <option value="CONCESION">Concesión</option>
+                      <option value="LICENCIA">Licencia</option>
+                      <option value="PERMISO">Permiso</option>
+                      <option value="AUTORIZACION">Autorización</option>
+                    </select>
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="date"
+                      id="fechaOtorgamiento"
+                    />
+                    <label class="mdl-textfield__label" for="fechaOtorgamiento"
+                      >Fecha de otorgamiento</label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>5.4 Participación en Dictaminación de Avalúos</h3>
+                <div class="form-grid">
+                  <div class="mdl-selectfield">
+                    <label for="tipoDictamen">Tipo de dictamen</label>
+                    <select id="tipoDictamen">
+                      <option value=""></option>
+                      <option value="AVALUO">Avalúo</option>
+                      <option value="JUSTIPRECIACION">
+                        Justipreciación de rentas
+                      </option>
+                    </select>
+                  </div>
+
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="date"
+                      id="fechaDictamen"
+                    />
+                    <label class="mdl-textfield__label" for="fechaDictamen"
+                      >Fecha del dictamen</label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Nivel Jerárquico del Servidor Público</h3>
+                <div class="checkbox-group">
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="operativo"
+                    >
+                      <input
+                        type="checkbox"
+                        id="operativo"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Operativo u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="enlace"
+                    >
+                      <input
+                        type="checkbox"
+                        id="enlace"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label">Enlace u homólogo</span>
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="jefatura"
+                    >
+                      <input
+                        type="checkbox"
+                        id="jefatura"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Jefatura de departamento u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="subdireccion"
+                    >
+                      <input
+                        type="checkbox"
+                        id="subdireccion"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Subdirección de área u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="direccion"
+                    >
+                      <input
+                        type="checkbox"
+                        id="direccion"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Dirección de área u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="direccionGeneral"
+                    >
+                      <input
+                        type="checkbox"
+                        id="direccionGeneral"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Dirección general u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="jefaturaUnidad"
+                    >
+                      <input
+                        type="checkbox"
+                        id="jefaturaUnidad"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Jefatura de unidad u homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="subsecretaria"
+                    >
+                      <input
+                        type="checkbox"
+                        id="subsecretaria"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Subsecretaría de estado, oficialía mayor u
+                        homólogo</span
+                      >
+                    </label>
+                  </div>
+                  <div class="checkbox-item">
+                    <label
+                      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+                      for="secretaria"
+                    >
+                      <input
+                        type="checkbox"
+                        id="secretaria"
+                        class="mdl-checkbox__input"
+                      />
+                      <span class="mdl-checkbox__label"
+                        >Secretaría de estado u homólogo</span
+                      >
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                  >
+                    <input
+                      class="mdl-textfield__input"
+                      type="text"
+                      id="otroNivel"
+                    />
+                    <label class="mdl-textfield__label" for="otroNivel"
+                      >Otro (Especifique)</label
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                style="background-color: var(--primary); margin-right: 16px"
+              >
+                Guardar Registro
+              </button>
+              <button class="mdl-button mdl-js-button mdl-button--raised">
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">Registros Recientes</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <thead>
+                  <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Ejercicio</th>
+                    <th class="mdl-data-table__cell--non-numeric">
+                      Expediente
+                    </th>
+                    <th class="mdl-data-table__cell--non-numeric">
+                      Servidor Público
+                    </th>
+                    <th class="mdl-data-table__cell--non-numeric">
+                      Tipo Procedimiento
+                    </th>
+                    <th class="mdl-data-table__cell--non-numeric">
+                      Fecha Participación
+                    </th>
+                    <th class="mdl-data-table__cell--non-numeric">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="mdl-data-table__cell--non-numeric">2024</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      EXP-2024-001
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      Juan Pérez López
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      Dictamen valuatorio
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      15/05/2024
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      <span class="badge badge-success">Completado</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mdl-data-table__cell--non-numeric">2024</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      EXP-2024-002
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      María González Ruiz
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      Enajenación de bienes
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      20/05/2024
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      <span class="badge badge-warning">En proceso</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="mdl-data-table__cell--non-numeric">2023</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      EXP-2023-150
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      Carlos Ramírez Soto
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      Otorgamiento de concesiones
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      10/12/2023
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      <span class="badge badge-success">Completado</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Inicializar componentes de Material Design Lite
+        componentHandler.upgradeAllRegistered();
+
+        // Manejar envío del formulario
+        document
+          .querySelector(".mdl-button--colored")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Obtener valores del formulario
+            const formData = {
+              ejercicio: document.getElementById("ejercicio").value,
+              numeroExpediente:
+                document.getElementById("numeroExpediente").value,
+              datosGenerales: document.getElementById("datosGenerales").value,
+              fechaParticipacion:
+                document.getElementById("fechaParticipacion").value,
+              tipoProcedimiento:
+                document.getElementById("tipoProcedimiento").value,
+              areaParticipacion:
+                document.getElementById("areaParticipacion").value,
+              objetoContrato: document.getElementById("objetoContrato").value,
+              procedimientoContratacion: document.getElementById(
+                "procedimientoContratacion"
+              ).value,
+              fechaInicio: document.getElementById("fechaInicio").value,
+              fechaConclusion: document.getElementById("fechaConclusion").value,
+              monto: document.getElementById("monto").value,
+            };
+
+            // Validar campos requeridos
+            if (!formData.ejercicio || !formData.fechaParticipacion) {
+              alert("Por favor complete los campos requeridos");
+              return;
+            }
+
+            // Simular envío a Directus
+            console.log("Enviando datos a Directus:", formData);
+            alert("Registro guardado exitosamente");
+
+            // Limpiar formulario
+            document.querySelector("form")?.reset();
+          });
+      });
+    </script>
+  </body>
+</html>
